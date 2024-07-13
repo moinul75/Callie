@@ -1,0 +1,310 @@
+{% load static %} 
+   <!-- === Header Start === -->
+   <header id="header">
+    <div id="nav">
+        <!-- top header -->
+        <div id="nav-top">
+            <div class="container">
+                <ul class="nav-social">
+                    <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
+                    <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa-brands fa-google-plus"></i></a></li>
+                    <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                </ul>
+                <div class="nav-logo">
+                    <!-- <a href="index.html" class="logo"><img src="./img/logo.png" alt></a> -->
+                    <a href="{% url "index" %}" class="logo">Call<span>i</span>e</a>
+                </div>
+                <div class="nav-btns">
+                    <button class="search-btn"><i class="fa fa-search"></i></button>
+                    <button class="aside-btn"><i class="fa-solid fa-bars-staggered"></i></button>
+                    <div id="nav-search">
+                        <form>
+                            <input class="input" name="search" placeholder="Enter your search...">
+                        </form>
+                        <button class="nav-close search-close">
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- main header -->
+        <div id="nav-bottom">
+            <div class="container">
+                <ul class="nav-menu">
+                    <li><a href="{% url "index" %}">Home</a></li>
+                    <li class="has-dropdown">
+                        <a href="#">About Us</a>
+                        <div class="dropdown">
+                            <div class="dropdown-body">
+                                <ul class="dropdown-list">
+                                    <li><a href="{% url "about" %}">About Me</a></li>
+                                    <li><a href="author.html">Author</a></li>
+                                    <li><a href="#">Dropdown</a></li>
+                                    <li><a href="#">Dropdown</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="has-dropdown megamenu">
+                        <a href="#">Categories</a>
+                        <div class="dropdown tab-dropdown">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <ul class="tab-nav"> 
+                                    {% for parent, children in category_hierarchy.items %} 
+                    
+                                        {% if forloop.first %}
+                                            <li class="active"><a data-toggle="tab" href="#tab{{ forloop.counter }}">{{ parent.name }}</a></li>
+                                        {% else %}
+                                            <li><a data-toggle="tab" href="#tab{{ forloop.counter }}">{{ parent.name }}</a></li>
+                                        {% endif %} 
+            
+                                    {% endfor %}
+                                    </ul> 
+                                    
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="dropdown-body tab-content">
+                                        <div id="tab1" class="tab-pane fade in active">
+                                            <div class="row">
+                                                <!-- Categories Travel -->
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="blog-post.html"><img
+                                                                src="{% static "./img/post-10.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Travel</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="blog-post.html">Sed ut perspiciatis, unde
+                                                                    omnis iste natus error sit</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">John Doe</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Categories Travel -->
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="blog-post.html"><img
+                                                                src="{% static "./img/post-13.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Travel</a>
+                                                                <a href="{% url "category" %}">Lifestyle</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="blog-post.html">Mel ut impetus suscipit
+                                                                    tincidunt. Cum id ullum laboramus
+                                                                    persequeris.</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">Sabbir Hosain</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="{% url "blog" %}"><img
+                                                                src="{% static "./img/post-12.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Lifestyle</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="{% url "blog" %}">Mel ut impetus suscipit
+                                                                    tincidunt. Cum id ullum laboramus
+                                                                    persequeris.</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">John Doe</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div id="tab2" class="tab-pane fade in">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="{% url "blog" %}"><img
+                                                                src="{% static "./img/post-5.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Lifestyle</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="{% url "blog" %}">Postea senserit id eos,
+                                                                    vivendo periculis ei qui</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">John Doe</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="{% url "blog" %}"><img
+                                                                src="{% static "./img/post-8.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Fashion</a>
+                                                                <a href="{% url "category" %}">Lifestyle</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="{% url "blog" %}">Sed ut perspiciatis, unde
+                                                                    omnis iste natus error sit</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">John Doe</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="post post-sm">
+                                                        <a class="post-img" href="{% url "blog" %}"><img
+                                                                src="{% static "./img/post-9.jpg" %}" alt></a>
+                                                        <div class="post-body">
+                                                            <div class="post-category">
+                                                                <a href="{% url "category" %}">Lifestyle</a>
+                                                            </div>
+                                                            <h3 class="post-title title-sm"><a
+                                                                    href="{% url "blog" %}">Mel ut impetus suscipit
+                                                                    tincidunt. Cum id ullum laboramus
+                                                                    persequeris.</a></h3>
+                                                            <ul class="post-meta">
+                                                                <li><a href="author.html">John Doe</a></li>
+                                                                <li>20 April 2023</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Mega Menu Start-->
+                    <li class="has-dropdown megamenu">
+                        <a href="#">Mega Menu</a>
+                        <div class="dropdown">
+                            <div class="dropdown-body">
+                                <div class="row">
+                                    <!--  -->
+                                    <div class="col-md-3">
+                                        <h4 class="dropdown-heading">Categories</h4>
+                                        <ul class="dropdown-list">
+                                            {% for parent, child in category_hierarchy.items %}
+                                            <li><a href="#">{{ parent.name }}</a></li> 
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <!--  -->
+                                    {% for parent, children in category_hierarchy.items %}
+                                    <div class="col-md-3"> 
+                                        <h4 class="dropdown-heading">{{ parent.name }}</h4>
+                                        <ul class="dropdown-list"> 
+                                            {% for child in children %}
+                                            <li><a href="#">{{ child.name }}</a></li> 
+                                            {% endfor %}
+                                        </ul>
+                                    </div> 
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Mega Menu End-->
+
+                    <li><a href="{% url "blog" %}">Blog</a></li>
+                    <li><a href="{% url "contact" %}">Contact</a></li>
+                </ul>
+
+            </div>
+        </div>
+        <!-- side bar -->
+        <div id="nav-aside">
+            <ul class="nav-aside-menu">
+                <li><a href="{% url "index" %}">Home</a></li>
+                <!-- about us -->
+                <li class="has-dropdown"><a>About Us</a>
+                    <ul class="dropdown">
+                        <li><a href="{% url "about" %}">About Me</a></li>
+                        <li><a href="author.html">Author</a></li>
+                        <li><a href="#">Dropdown</a></li>
+                        <li><a href="#">Dropdown</a></li>
+                    </ul>
+                </li>
+                <!-- category -->
+                <li class="has-dropdown"><a>Categories</a>
+                    <ul class="dropdown"> 
+                        {% for category, children in category_hierarchy.items %}
+                        <li><a href="#">{{ category.name }}</a></li> 
+                        {% endfor %}
+                    </ul>
+                </li>
+                <!-- mega menu -->
+                {% comment %} <li class="has-dropdown"><a>Mega Menu</a>
+                    <ul class="dropdown">
+                        <li class="has-dropdown"><a>Category</a>
+                            <ul class="dropdown"> 
+                                {% for category in parent_category %}
+                                <li><a href="#">{{ category.name }}</a></li> 
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="has-dropdown"><a>LifeStyle</a>
+                            <ul class="dropdown">
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-dropdown"><a>Technology</a>
+                            <ul class="dropdown">
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-dropdown"><a>Fashion</a>
+                            <ul class="dropdown">
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                                <li><a href="#">Dropdown</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li> {% endcomment %}
+
+                <li><a href="blog-post.html">Blog</a></li>
+                <li><a href="{% url "contact" %}">Contacts</a></li>
+            </ul>
+            <button class="nav-close nav-aside-close"><span></span></button>
+        </div>
+
+    </div>
+
+</header>
+<!-- === Header End === --> 
