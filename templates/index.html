@@ -159,7 +159,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="section-title">
-                                <h2 class="title">Fashion & Travel</h2>
+                                <h2 class="title">Fashion & Beauty</h2>
                             </div>
                         </div>
                         <!-- fashion & travel post 1-->
@@ -179,41 +179,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- fashion & travel post 2 -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="{% static "./img/post-12.jpg" %}" alt></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Lifestyle</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Sed ut perspiciatis, unde
-                                            omnis iste natus error sit</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2023</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- fashion & travel post 3-->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="{% static "./img/post-13.jpg" %}" alt></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Travel</a>
-                                        <a href="category.html">Lifestyle</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Mel ut impetus suscipit
-                                            tincidunt. Cum id ullum laboramus persequeris.</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2023</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                      
                     </div>
                     <!-- fashion & travel end-->
 
@@ -234,40 +200,6 @@
                                     </div>
                                     <h3 class="post-title title-sm"><a href="blog-post.html">Postea senserit id eos,
                                             vivendo periculis ei qui</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2023</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- technology & health post 2 -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="{% static "./img/post-1.jpg" %}" alt></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Travel</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Mel ut impetus suscipit
-                                            tincidunt. Cum id ullum laboramus persequeris.</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2023</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- technology & health post 3 -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="{% static "./img/post-3.jpg" %}" alt></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Lifestyle</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Ne bonorum praesent cum,
-                                            labitur persequeris definitionem quo cu?</a></h3>
                                     <ul class="post-meta">
                                         <li><a href="author.html">John Doe</a></li>
                                         <li>20 April 2023</li>
@@ -334,12 +266,25 @@
                             <h2 class="title">Newsletter</h2>
                         </div>
                         <div class="newsletter-widget">
-                            <form>
+                            <form method="post" action="{% url 'index' %}">
+                                {% csrf_token %}
                                 <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
-                                <input class="input" name="newsletter" placeholder="Enter Your Email">
-                                <button class="primary-button">Subscribe</button>
+                                <input class="input" name="email" required placeholder="Enter Your Email" value="{{ newslatter_form.email.value|default:'' }}">
+                                <button class="primary-button" type="submit">Subscribe</button>
+                                {% if messages %}
+                                    <div class="alert mt-3" role="alert">
+                                        {% for message in messages %}
+                                            {% if message.tags == 'error' %}
+                                                <div class="alert alert-danger">{{ message }}</div>
+                                            {% else %}
+                                                <div class="alert alert-success">{{ message }}</div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </form>
                         </div>
+                        
                     </div>
                     <!-- popular post -->
                     <div class="aside-widget">
@@ -357,41 +302,7 @@
                                         persequeris definitionem quo cu?</a></h3>
                             </div>
                         </div>
-                        <!-- popular post 2-->
-                        <div class="post post-widget">
-                            <a class="post-img" href="blog-post.html"><img src="{% static "./img/widget-2.jpg" %}" alt></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="category.html">Technology</a>
-                                    <a href="category.html">Lifestyle</a>
-                                </div>
-                                <h3 class="post-title"><a href="blog-post.html">Mel ut impetus suscipit tincidunt. Cum
-                                        id ullum laboramus persequeris.</a></h3>
-                            </div>
-                        </div>
-                        <!-- popular post 3-->
-                        <div class="post post-widget">
-                            <a class="post-img" href="blog-post.html"><img src="{% static "./img/widget-4.jpg" %}" alt></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="category.html">Health</a>
-                                </div>
-                                <h3 class="post-title"><a href="blog-post.html">Postea senserit id eos, vivendo
-                                        periculis ei qui</a></h3>
-                            </div>
-                        </div>
-                        <!-- popular post 4-->
-                        <div class="post post-widget">
-                            <a class="post-img" href="blog-post.html"><img src="{% static "./img/widget-5.jpg" %}" alt></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="category.html">Health</a>
-                                    <a href="category.html">Lifestyle</a>
-                                </div>
-                                <h3 class="post-title"><a href="blog-post.html">Sed ut perspiciatis, unde omnis iste
-                                        natus error sit</a></h3>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

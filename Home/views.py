@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect ,get_object_or_404
-from .models import Category,Post,PostImage
+from .models import Category,Post,PostImage 
+from django.contrib import messages
+from .forms import NewslatterForm
 
 def get_category(): 
     category = Category.objects.all() 
@@ -14,7 +16,19 @@ def get_category():
     
         
 
-def home(request):
+def home(request): 
+    if request.method == 'POST':
+        form = NewslatterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have successfully subscribed to the newsletter.')
+            return redirect('index')
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
+    else:
+        form = NewslatterForm()
+        
     hero_posts = {}
     categories = Category.objects.all()
     recent_posts = Post.objects.order_by('-created_at')[:4]
@@ -24,11 +38,11 @@ def home(request):
         latest_post = Post.objects.filter(category=category).order_by('-created_at').first()
         if latest_post:
             hero_posts[category.name] = latest_post
-    print(hero_posts) 
     context = {
         'recent_posts': recent_posts,
         'lifestyle_posts': lifestyle_posts,
-        'hero_posts': hero_posts
+        'hero_posts': hero_posts, 
+        'newslatter_form': form,
     }
     return render(request, 'index.html', context)
 

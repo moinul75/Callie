@@ -45,8 +45,15 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to='post_images/')
 
     def __str__(self):
-        return f"Image for {self.post.title}"
+        return f"Image for {self.post.title}" 
     
+class Newslatter(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+        
 
 
 

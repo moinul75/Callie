@@ -54,7 +54,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages', 
-                'Home.context_processors.category_hierarchy'
+                'Home.context_processors.category_hierarchy',
+                'Home.context_processors.tags',
+                'Home.context_processors.categories_with_counts',
             ],
         },
     },
