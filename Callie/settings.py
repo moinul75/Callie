@@ -57,6 +57,7 @@ TEMPLATES = [
                 'Home.context_processors.category_hierarchy',
                 'Home.context_processors.tags',
                 'Home.context_processors.categories_with_counts',
+                'Home.context_processors.Newslatter',
             ],
         },
     },

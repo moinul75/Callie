@@ -1,6 +1,8 @@
-from Home.models import Category  
+from Home.models import Category,Newslatter 
 from taggit.models import Tag 
-from django.db.models import Count
+from django.db.models import Count 
+from .forms import NewslatterForm  
+from django.contrib import messages
 
 def get_category_hierarchy():
     categories = Category.objects.all()
@@ -29,4 +31,19 @@ def categories_with_counts(request):
     categories = Category.objects.filter(parent__isnull=True).annotate(post_count=Count('post')).order_by('-post_count')
     return {
         'footer_categories': categories
-    }
+    } 
+    
+def Newslatter(request):  
+    context = {}
+    if request.method == 'POST':
+        form = NewslatterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have successfully subscribed to the newsletter.')
+        else:
+            context['newsletter_form'] = form
+            context['newsletter_form_errors'] = form.errors
+    else:
+        context['newsletter_form'] = NewslatterForm() 
+    
+    return context

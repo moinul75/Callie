@@ -49,10 +49,30 @@
                     <div class="footer-widget">
                         <h3 class="footer-title">Newsletter</h3>
                         <div class="newsletter-widget">
-                            <form>
+                            {% comment %} <form>
                                 <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
                                 <input class="input" name="newsletter" placeholder="Enter Your Email">
                                 <button class="primary-button">Subscribe</button>
+                            </form> {% endcomment %} 
+                           
+                            <form method="post" action="{% url 'index' %}">
+                                {% csrf_token %}
+                                <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
+                                {% if messages %}
+                                <div class="alert mt-3" role="alert">
+                                    {% for message in messages %}
+                                        {% if message.tags == 'error' %}
+                                            <div class="alert alert-danger">{{ message }}</div>
+                                        {% elif message.tags == 'success' %}
+                                            <div class="alert alert-success">{{ message }}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                                <input class="input" name="email" required placeholder="Enter Your Email" value="{{ newslatter_form.email.value|default:'' }}">
+                                <button class="primary-button" type="submit">Subscribe</button>
+                                
+                               
                             </form>
                         </div>
                     </div>
