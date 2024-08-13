@@ -40,9 +40,7 @@
                             <div class="dropdown-body">
                                 <ul class="dropdown-list">
                                     <li><a href="{% url "about" %}">About Me</a></li>
-                                    <li><a href="author.html">Author</a></li>
-                                    <li><a href="#">Dropdown</a></li>
-                                    <li><a href="#">Dropdown</a></li>
+                                    <li><a href="{% url "author" %}">Author</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -51,156 +49,69 @@
                         <a href="#">Categories</a>
                         <div class="dropdown tab-dropdown">
                             <div class="row">
+                                <!-- Left Side: Parent Category Names -->
                                 <div class="col-md-2">
-                                    <ul class="tab-nav"> 
-                                    {% for parent, children in category_hierarchy.items %} 
-                    
-                                        {% if forloop.first %}
-                                            <li class="active"><a data-toggle="tab" href="#tab{{ forloop.counter }}">{{ parent.name }}</a></li>
-                                        {% else %}
-                                            <li><a data-toggle="tab" href="#tab{{ forloop.counter }}">{{ parent.name }}</a></li>
-                                        {% endif %} 
-            
-                                    {% endfor %}
-                                    </ul> 
-                                    
+                                    <ul class="tab-nav">
+                                        {% for parent, posts in category_hierarchy_header.items %}
+                                            <li class="{% if forloop.first %}active{% endif %}">
+                                                <a data-toggle="tab" href="#tab{{ forloop.counter }}">{{ parent.name }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
+                    
+                                <!-- Right Side: Posts in Parent and Child Categories -->
                                 <div class="col-md-10">
                                     <div class="dropdown-body tab-content">
-                                        <div id="tab1" class="tab-pane fade in active">
-                                            <div class="row">
-                                                <!-- Categories Travel -->
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="blog-post.html"><img
-                                                                src="{% static "./img/post-10.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Travel</a>
+                                        {% for parent, posts in category_hierarchy_header.items %}
+                                            <div id="tab{{ forloop.counter }}" class="tab-pane fade {% if forloop.first %}in active{% endif %}">
+                                                <div class="row">
+                                                    {% if posts %}
+                                                        {% for post in posts %}
+                                                            <div class="col-md-4">
+                                                                <div class="post post-sm">
+                                                                    <!-- Post Image -->
+                                                                    <a class="post-img" href="{{ post.get_absolute_url }}">
+                                                                        {% if post.images.exists %}
+                                                                            <img src="{{ post.images.first.image.url }}" alt="{{ post.title }}">
+                                                                        {% else %}
+                                                                            <img src="{% static 'path/to/default/image.jpg' %}" alt="{{ post.title }}">
+                                                                        {% endif %}
+                                                                    </a>
+                                                                    
+                                                                    <!-- Post Content -->
+                                                                    <div class="post-body">
+                                                                        <div class="post-category">
+                                                                            <a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a>
+                                                                        </div>
+                                                                        <h3 class="post-title title-sm">
+                                                                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                                                                        </h3>
+                                                                        <ul class="post-meta">
+                                                                            <li><a href="{{ post.author.get_absolute_url }}">{{ post.author.username }}</a></li>
+                                                                            <li>{{ post.created_at|date:"d M Y" }}</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="blog-post.html">Sed ut perspiciatis, unde
-                                                                    omnis iste natus error sit</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">John Doe</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <div class="col-md-12">
+                                                            <p>No posts found.</p>
                                                         </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </div>
-                                                <!-- Categories Travel -->
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="blog-post.html"><img
-                                                                src="{% static "./img/post-13.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Travel</a>
-                                                                <a href="{% url "category" %}">Lifestyle</a>
-                                                            </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="blog-post.html">Mel ut impetus suscipit
-                                                                    tincidunt. Cum id ullum laboramus
-                                                                    persequeris.</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">Sabbir Hosain</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="{% url "blog" %}"><img
-                                                                src="{% static "./img/post-12.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Lifestyle</a>
-                                                            </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="{% url "blog" %}">Mel ut impetus suscipit
-                                                                    tincidunt. Cum id ullum laboramus
-                                                                    persequeris.</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">John Doe</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
-                                        </div>
-
-                                        <div id="tab2" class="tab-pane fade in">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="{% url "blog" %}"><img
-                                                                src="{% static "./img/post-5.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Lifestyle</a>
-                                                            </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="{% url "blog" %}">Postea senserit id eos,
-                                                                    vivendo periculis ei qui</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">John Doe</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="{% url "blog" %}"><img
-                                                                src="{% static "./img/post-8.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Fashion</a>
-                                                                <a href="{% url "category" %}">Lifestyle</a>
-                                                            </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="{% url "blog" %}">Sed ut perspiciatis, unde
-                                                                    omnis iste natus error sit</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">John Doe</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="post post-sm">
-                                                        <a class="post-img" href="{% url "blog" %}"><img
-                                                                src="{% static "./img/post-9.jpg" %}" alt></a>
-                                                        <div class="post-body">
-                                                            <div class="post-category">
-                                                                <a href="{% url "category" %}">Lifestyle</a>
-                                                            </div>
-                                                            <h3 class="post-title title-sm"><a
-                                                                    href="{% url "blog" %}">Mel ut impetus suscipit
-                                                                    tincidunt. Cum id ullum laboramus
-                                                                    persequeris.</a></h3>
-                                                            <ul class="post-meta">
-                                                                <li><a href="author.html">John Doe</a></li>
-                                                                <li>20 April 2023</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </li>
+                    
+                    
+                    
 
                     <!-- Mega Menu Start-->
                     <li class="has-dropdown megamenu">
@@ -248,9 +159,7 @@
                 <li class="has-dropdown"><a>About Us</a>
                     <ul class="dropdown">
                         <li><a href="{% url "about" %}">About Me</a></li>
-                        <li><a href="author.html">Author</a></li>
-                        <li><a href="#">Dropdown</a></li>
-                        <li><a href="#">Dropdown</a></li>
+                        <li><a href="{% url "author" %}">Author</a></li>
                     </ul>
                 </li>
                 <!-- category -->

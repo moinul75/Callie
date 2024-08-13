@@ -1,8 +1,8 @@
-from Home.models import Category,Newslatter 
+from Home.models import Category,Newslatter,Post,PostImage
 from taggit.models import Tag 
 from django.db.models import Count 
 from .forms import NewslatterForm  
-from django.contrib import messages
+from django.contrib import messages 
 
 def get_category_hierarchy():
     categories = Category.objects.all()
@@ -46,4 +46,24 @@ def Newslatter(request):
     else:
         context['newsletter_form'] = NewslatterForm() 
     
-    return context
+    return context 
+
+
+
+def category_hierarchy_header(request):
+    hierarchy = {}
+    categories = Category.objects.filter(parent__isnull=True)  
+
+    for category in categories:
+        posts = Post.objects.filter(category=category)
+        
+        # Fetch posts for child categories
+        child_categories = Category.objects.filter(parent=category)
+        for child in child_categories:
+            child_posts = Post.objects.filter(category=child)
+            posts = posts | child_posts  
+        
+        posts = posts[:3]
+
+        hierarchy[category] = posts 
+    return {'category_hierarchy_header': hierarchy}

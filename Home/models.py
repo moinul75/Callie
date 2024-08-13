@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User 
 from django.utils.text import slugify 
 from taggit.managers import TaggableManager
-from tinymce.models import HTMLField
+from tinymce.models import HTMLField 
+from django.urls import reverse
 
 # Create your models here. 
 class Category(models.Model): 
@@ -29,10 +30,14 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) 
-    tags = TaggableManager() 
+    tags = TaggableManager()  
+    post_view = models.PositiveIntegerField(default=0)
     
     def __str__(self) -> str:
-        return self.title
+        return self.title 
+    
+    def get_absolute_url(self):
+        return reverse('details_blog', kwargs={'post_id': self.id})
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -45,7 +50,34 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to='post_images/')
 
     def __str__(self):
-        return f"Image for {self.post.title}" 
+        return f"Image for {self.post.title}"  
+    
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.post.title}"
+
+    class Meta:
+        ordering = ['created_at']
+
+class Reply(models.Model):
+    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Reply by {self.user.username} on comment {self.comment.id}"
+
+    class Meta:
+        ordering = ['created_at']
     
 class Newslatter(models.Model):
     email = models.EmailField(unique=True)

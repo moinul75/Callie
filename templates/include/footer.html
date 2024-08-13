@@ -26,7 +26,7 @@
                         <div class="category-widget">
                             <ul>
                             {% for category in footer_categories %}
-                                <li><a href="{% url 'category' %}">{{ category.name }} <span>{{ category.post_count }}</span></a></li>
+                                <li><a href="{% url 'category_details' category.id %}">{{ category.name }} <span>{{ category.post_count }}</span></a></li>
                             {% endfor %}
                             </ul>
                         </div>

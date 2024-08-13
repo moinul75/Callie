@@ -16,7 +16,8 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [ 
+INSTALLED_APPS = [
+    #'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,6 +59,7 @@ TEMPLATES = [
                 'Home.context_processors.tags',
                 'Home.context_processors.categories_with_counts',
                 'Home.context_processors.Newslatter',
+                'Home.context_processors.category_hierarchy_header',
             ],
         },
     },
@@ -117,7 +119,10 @@ STATICFILES_DIRS = [
 ]  
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/' 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+
+LOGIN_URL = '/login'  
+LOGIN_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

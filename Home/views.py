@@ -1,7 +1,11 @@
 from django.shortcuts import render,redirect ,get_object_or_404
-from .models import Category,Post,PostImage 
+from .models import Category,Post,PostImage,Comment,Reply
 from django.contrib import messages
-from .forms import NewslatterForm
+from .forms import NewslatterForm,CommentForm,ReplyForm
+from django.utils import timezone
+from datetime import timedelta 
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def get_category(): 
     category = Category.objects.all() 
@@ -17,27 +21,33 @@ def get_category():
         
 
 def home(request): 
+    # Handle newsletter subscription form
     if request.method == 'POST':
         form = NewslatterForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'You have successfully subscribed to the newsletter.')
-            return redirect('index')
+            return redirect('index')  # Redirect to avoid resubmission on refresh
         else:
-            for error in form.errors.values():
-                messages.error(request, error)
+            # Collect all form errors and display them
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(request, error)
     else:
         form = NewslatterForm()
         
-    hero_posts = {}
+    # Fetch data for the homepage
     categories = Category.objects.all()
     recent_posts = Post.objects.order_by('-created_at')[:4]
     lifestyle_posts = Post.objects.filter(category__name='Life Style')
-
+    
+    # Create a dictionary of hero posts with the latest post per category
+    hero_posts = {}
     for category in categories:
         latest_post = Post.objects.filter(category=category).order_by('-created_at').first()
         if latest_post:
-            hero_posts[category.name] = latest_post
+            hero_posts[category] = latest_post
+
     context = {
         'recent_posts': recent_posts,
         'lifestyle_posts': lifestyle_posts,
@@ -49,18 +59,80 @@ def home(request):
 def contact(request):
     return render(request,'contact.html')  
 
-def details_blog(request, post_id):  
-    post = get_object_or_404(Post, id=post_id) 
+def details_blog(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    last_viewed_str = request.session.get(f'post_{post_id}_last_viewed')
+    last_viewed = None
+    if last_viewed_str:
+        try:
+            last_viewed = timezone.datetime.fromisoformat(last_viewed_str)
+            if last_viewed.tzinfo is None:
+                last_viewed = timezone.make_aware(last_viewed)
+        except ValueError:
+            last_viewed = None
+
+    now = timezone.now()
+
+    if last_viewed is None or (now - last_viewed) > timedelta(minutes=5):
+        post.post_view += 1
+        post.save()
+        request.session[f'post_{post_id}_last_viewed'] = now.isoformat()
+
     context = {
-        'post':post
+        'post': post
     }
-    return render(request,'details_blog.html',context)
+    return render(request, 'details_blog.html', context)
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            messages.success(request, 'Your comment has been added.')
+            return redirect(post.get_absolute_url())
+        else:
+            messages.error(request, 'There was a problem with your comment.')
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment.html', {'form': form, 'post': post})
+
+@login_required
+def reply_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    post = comment.post
+    if request.method == 'POST':
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.comment = comment
+            reply.user = request.user
+            reply.save()
+            messages.success(request, 'Your reply has been added.')
+            return redirect(post.get_absolute_url())
+        else:
+            messages.error(request, 'There was a problem with your reply.')
+    else:
+        form = ReplyForm()
+    return render(request, 'add_reply.html', {'form': form, 'post': post, 'comment': comment})
 
 def blog(request): 
     return render(request,'blog-post.html')  
 
-def category(request): 
-    return  render(request,'category.html') 
+def category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    posts = Post.objects.filter(category=category)
+    
+    context = {
+        'category': category,
+        'posts': posts
+    }
+    return render(request, 'category.html', context)
 
 def about(request): 
     return render(request,'about.html')   

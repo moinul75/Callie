@@ -24,7 +24,8 @@
                                 </a>
                                 <div class="post-body">
                                     <div class="post-category">
-                                        <a href="{% url 'category' %}">{{ category }}</a>
+                                        <a href="{% url 'category_details' category.id %}">{{ category.name }}</a> 
+                                        <p></p>
                                     </div>
                                     <h3 class="post-title title-lg">
                                         <a href="{% url 'details_blog' hero_post.id %}">{{ hero_post.title }}</a>
@@ -55,7 +56,7 @@
                                 </a>
                                 <div class="post-body">
                                     <div class="post-category">
-                                        <a href="{% url 'category' %}">{{ category }}</a>
+                                        <a href="{% url 'category_details' category.id %}">{{ category }}</a>
                                     </div>
                                     <h3 class="post-title">
                                         <a href="{% url 'details_blog' hero_post.id %}">{{ hero_post.title }}</a>
@@ -100,7 +101,7 @@
                                 </a>
                                 <div class="post-body">
                                     <div class="post-category">
-                                        <a href="category.html">   
+                                        <a href="{% url 'category_details' post.category.id %}">   
                                             {% if post.category.parent %}
                                              {{ post.category.parent.name }}, {{ post.category.name }}
                                            {% else %}
@@ -140,7 +141,7 @@
                                 </a>
                                 <div class="post-body">
                                     <div class="post-category">
-                                        <a href="{% url "category" %}">Lifestyle</a>
+                                        <a href="{% url "category_details" post.category.id %}">{{ post.category.name }}</a>
                                     </div>
                                     <h3 class="post-title title-sm"><a href="{% url "details_blog" post.id %}">{{ post.title }}</a></h3>
                                     <ul class="post-meta">
@@ -211,100 +212,7 @@
                     <!-- technology & health start -->
                 </div>
                 <!-- right side -->
-                <div class="col-md-4">
-                    <div class="aside-widget text-center">
-                        <a href="#" style="display: inline-block;margin: auto;">
-                            <img class="img-responsive" src="{% static "./img/ad-3.jpg" %}" alt>
-                        </a>
-                    </div>
-                    <!-- socail media  -->
-                    <div class="aside-widget">
-                        <div class="section-title">
-                            <h2 class="title">Social Media</h2>
-                        </div>
-                        <div class="social-widget">
-                            <ul>
-                                <li>
-                                    <a href="#" class="social-facebook">
-                                        <i class="fa-brands fa-facebook"></i>
-                                        <span>21.2K<br>Followers</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-twitter">
-                                        <i class="fa-brands fa-twitter"></i>
-                                        <span>10.2K<br>Followers</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-google-plus">
-                                        <i class="fa-brands fa-google-plus"></i>
-                                        <span>5K<br>Followers</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- category -->
-                    <div class="aside-widget">
-                        <div class="section-title">
-                            <h2 class="title">Categories</h2>
-                        </div>
-                        <div class="category-widget">
-                            <ul>
-                                <li><a href="#">Lifestyle <span>451</span></a></li>
-                                <li><a href="#">Fashion <span>230</span></a></li>
-                                <li><a href="#">Technology <span>40</span></a></li>
-                                <li><a href="#">Travel <span>38</span></a></li>
-                                <li><a href="#">Health <span>24</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- newsletter -->
-                    <div class="aside-widget">
-                        <div class="section-title">
-                            <h2 class="title">Newsletter</h2>
-                        </div>
-                        <div class="newsletter-widget">
-                            <form method="post" action="{% url 'index' %}">
-                                {% csrf_token %}
-                                <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
-                                <input class="input" name="email" required placeholder="Enter Your Email" value="{{ newslatter_form.email.value|default:'' }}">
-                                <button class="primary-button" type="submit">Subscribe</button>
-                                {% if messages %}
-                                    <div class="alert mt-3" role="alert">
-                                        {% for message in messages %}
-                                            {% if message.tags == 'error' %}
-                                                <div class="alert alert-danger">{{ message }}</div>
-                                            {% else %}
-                                                <div class="alert alert-success">{{ message }}</div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </form>
-                        </div>
-                        
-                    </div>
-                    <!-- popular post -->
-                    <div class="aside-widget">
-                        <div class="section-title">
-                            <h2 class="title">Popular Posts</h2>
-                        </div>
-                        <!-- popular post 1-->
-                        <div class="post post-widget">
-                            <a class="post-img" href="blog-post.html"><img src="{% static "./img/widget-3.jpg" %}" alt></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="category.html">Lifestyle</a>
-                                </div>
-                                <h3 class="post-title"><a href="blog-post.html">Ne bonorum praesent cum, labitur
-                                        persequeris definitionem quo cu?</a></h3>
-                            </div>
-                        </div>
-                       
-                    </div>
-                </div>
+                {% include "include/right_side.html" %}
             </div>
         </div>
     </section>

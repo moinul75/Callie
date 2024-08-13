@@ -1,0 +1,148 @@
+{% load static %} 
+<div class="col-md-4">
+
+    <div class="aside-widget text-center">
+        <a href="#" style="display: inline-block;margin: auto;">
+            <img class="img-responsive" src="{% static "./img/ad-3.jpg" %}" alt>
+        </a>
+    </div>
+
+
+    <div class="aside-widget">
+        <div class="section-title">
+            <h2 class="title">Social Media</h2>
+        </div>
+        <div class="social-widget">
+            <ul>
+                <li>
+                    <a href="#" class="social-facebook">
+                        <i class="fa-brands fa-facebook"></i>
+                        <span>21.2K<br>Followers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="social-twitter">
+                        <i class="fa-brands fa-twitter"></i>
+                        <span>10.2K<br>Followers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="social-google-plus">
+                        <i class="fa-brands fa-google-plus"></i>
+                        <span>5K<br>Followers</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="aside-widget">
+        <div class="section-title">
+            <h2 class="title">Categories</h2>
+        </div>
+        <div class="category-widget">
+            <ul>
+                {% for category in footer_categories %}
+                <li><a href="{% url "category_details" category.id %}">{{ category.name }} <span>{{ category.post_count }}</span></a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="aside-widget">
+        <div class="section-title">
+            <h2 class="title">Newsletter</h2>
+        </div>
+        <div class="newsletter-widget">
+            <form>
+                <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
+                <input class="input" placeholder="Enter Your Email">
+                <button class="primary-button">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="aside-widget">
+        <div class="section-title">
+            <h2 class="title">Popular Posts</h2>
+        </div>
+
+        <div class="post post-widget">
+            <a class="post-img" href="{% url "blog" %}"><img src="{% static "./img/widget-3.jpg" %}" alt></a>
+            <div class="post-body">
+                <div class="post-category">
+                    <a href="category.html">Lifestyle</a>
+                </div>
+                <h3 class="post-title"><a href="{% url "blog" %}">Ne bonorum praesent cum, labitur
+                        persequeris definitionem quo cu?</a></h3>
+            </div>
+        </div>
+
+
+        <div class="post post-widget">
+            <a class="post-img" href="{% url "blog" %}"><img src="{% static "./img/widget-2.jpg" %}" alt></a>
+            <div class="post-body">
+                <div class="post-category">
+                    <a href="category.html">Technology</a>
+                    <a href="category.html">Lifestyle</a>
+                </div>
+                <h3 class="post-title"><a href="{% url "blog" %}">Mel ut impetus suscipit tincidunt. Cum
+                        id ullum laboramus persequeris.</a></h3>
+            </div>
+        </div>
+
+
+        <div class="post post-widget">
+            <a class="post-img" href="{% url "blog" %}"><img src="{% static "./img/widget-4.jpg" %}" alt></a>
+            <div class="post-body">
+                <div class="post-category">
+                    <a href="category.html">Health</a>
+                </div>
+                <h3 class="post-title"><a href="{% url "blog" %}">Postea senserit id eos, vivendo
+                        periculis ei qui</a></h3>
+            </div>
+        </div>
+
+
+        <div class="post post-widget">
+            <a class="post-img" href="{% url "blog" %}"><img src="{% static "./img/widget-5.jpg" %}" alt></a>
+            <div class="post-body">
+                <div class="post-category">
+                    <a href="category.html">Health</a>
+                    <a href="category.html">Lifestyle</a>
+                </div>
+                <h3 class="post-title"><a href="{% url "blog" %}">Sed ut perspiciatis, unde omnis iste
+                        natus error sit</a></h3>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="aside-widget">
+        <div class="section-title">
+            <h2 class="title">Instagram</h2>
+        </div>
+        <div class="galery-widget">
+            <ul>
+                <li><a href="#"><img src="{% static "./img/galery-1.jpg" %}" alt></a></li>
+                <li><a href="#"><img src="{% static "./img/galery-2.jpg" %}" alt></a></li>
+                <li><a href="#"><img src="{% static "./img/galery-3.jpg" %}" alt></a></li>
+                <li><a href="#"><img src="{% static "" %}" alt></a></li>
+                <li><a href="#"><img src="{% static "./img/galery-5.jpg" %}" alt></a></li>
+                <li><a href="#"><img src="{% static "./img/galery-6.jpg" %}" alt></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="aside-widget text-center">
+        <a href="#" style="display: inline-block;margin: auto;">
+            <img class="img-responsive" src="{% static "./img/ad-1.jpg" %}" alt>
+        </a>
+    </div>
+
+</div>

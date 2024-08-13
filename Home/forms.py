@@ -1,5 +1,5 @@
 from django import forms
-from .models import Newslatter
+from .models import Newslatter,Comment, Reply
 
 class NewslatterForm(forms.ModelForm):
     class Meta:
@@ -16,4 +16,15 @@ class NewslatterForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if Newslatter.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already subscribed.")
-        return email
+        return email 
+    
+    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ['content']
