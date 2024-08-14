@@ -66,4 +66,10 @@ def category_hierarchy_header(request):
         posts = posts[:3]
 
         hierarchy[category] = posts 
-    return {'category_hierarchy_header': hierarchy}
+    return {'category_hierarchy_header': hierarchy} 
+
+def popular_posts(request):
+    popular_posts = Post.objects.order_by('-post_view')[:3]
+    return {
+        'popular_posts': popular_posts
+    }

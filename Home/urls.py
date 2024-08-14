@@ -1,5 +1,5 @@
 from django.urls import path  
-from .views import home,contact,blog,category,about,author,details_blog,add_comment,reply_comment
+from .views import home,contact,blog,category,about,author,details_blog
 
 urlpatterns = [
     path('',home,name='index'),
@@ -9,6 +9,6 @@ urlpatterns = [
     path('category/<int:category_id>/',category,name='category_details'),
     path('about/',about,name='about'),
     path('author/',author,name='author'), 
-    path('post/<int:post_id>/add_comment/', add_comment, name='add_comment'),
-    path('comment/<int:comment_id>/reply/', reply_comment, name='reply_comment'),
+ #   path('post/<int:post_id>/add_comment/', add_comment, name='add_comment'),
+  #  path('comment/<int:comment_id>/reply/', reply_comment, name='reply_comment'),
 ]

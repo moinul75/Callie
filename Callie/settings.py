@@ -60,6 +60,7 @@ TEMPLATES = [
                 'Home.context_processors.categories_with_counts',
                 'Home.context_processors.Newslatter',
                 'Home.context_processors.category_hierarchy_header',
+                'Home.context_processors.popular_posts',
             ],
         },
     },
@@ -122,7 +123,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
 LOGIN_URL = '/login'  
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/' 
+AUTH_USER_MODEL = 'Account.User'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

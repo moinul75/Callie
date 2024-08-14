@@ -1,9 +1,10 @@
 from django.db import models 
-from django.contrib.auth.models import User 
+from Account.models import User 
 from django.utils.text import slugify 
 from taggit.managers import TaggableManager
 from tinymce.models import HTMLField 
-from django.urls import reverse
+from django.urls import reverse 
+from .utils import resize_and_crop_image
 
 # Create your models here. 
 class Category(models.Model): 
@@ -50,7 +51,13 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to='post_images/')
 
     def __str__(self):
-        return f"Image for {self.post.title}"  
+        return f"Image for {self.post.title}"   
+    
+    def save(self, *args, **kwargs):
+        if self.image:
+            processed_image = resize_and_crop_image(self.image)
+            self.image.save(self.image.name, processed_image, save=False)
+        super().save(*args, **kwargs)
     
     
 class Comment(models.Model):
@@ -60,8 +67,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    def __str__(self):
-        return f"Comment by {self.user.username} on {self.post.title}"
+    # def __str__(self):
+    #     return f"Comment by {self.user.username} on {self.post.title}"
 
     class Meta:
         ordering = ['created_at']

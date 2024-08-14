@@ -178,63 +178,41 @@
 
                     <div class="section-row">
                         <div class="section-title">
-                            <h3 class="title">3 Comments</h3>
+                            <h3 class="title">{{ post.comments.count }} Comments</h3>
                         </div>
                         <div class="post-comments">
-
+                            {% for comment in post.comments.all %}
                             <div class="media">
                                 <div class="media-left">
-                                    <img class="media-object" src="{% static "./img/avatar-2.jpg" %}" alt>
+                                    <img class="media-object" src="{{ comment.user.image.url|default:'path/to/default/avatar.jpg' }}" alt="{{ comment.user.username }}">
                                 </div>
                                 <div class="media-body">
                                     <div class="media-heading">
-                                        <h4>John Doe</h4>
-                                        <span class="time">5 min ago</span>
+                                        <h4>{{ comment.user.username }}</h4>
+                                        <span class="time">{{ comment.created_at|timesince }} ago</span>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat.</p>
-                                    <a href="#" class="reply">Reply</a>
-
+                                    <p>{{ comment.content }}</p>
+                                    <a href="#reply-{{ comment.id }}" class="reply">Reply</a>
+                    
+                                    {% for reply in comment.replies.all %}
                                     <div class="media media-author">
                                         <div class="media-left">
-                                            <img class="media-object" src="{% static "./img/avatar-1.jpg" %}" alt>
+                                            <img class="media-object" src="{{ reply.user.profile.image.url|default:'path/to/default/avatar.jpg' }}" alt="{{ reply.user.username }}">
                                         </div>
                                         <div class="media-body">
                                             <div class="media-heading">
-                                                <h4>John Doe</h4>
-                                                <span class="time">5 min ago</span>
+                                                <h4>{{ reply.user.username }}</h4>
+                                                <span class="time">{{ reply.created_at|timesince }} ago</span>
                                             </div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                                                ex ea commodo consequat.</p>
-                                            <a href="#" class="reply">Reply</a>
+                                            <p>{{ reply.content }}</p>
+                                            <a href="#reply-{{ reply.id }}" class="reply">Reply</a>
                                         </div>
                                     </div>
-
+                                    {% endfor %}
+                    
                                 </div>
                             </div>
-
-
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{% static "./img/avatar-3.jpg" %}" alt>
-                                </div>
-                                <div class="media-body">
-                                    <div class="media-heading">
-                                        <h4>John Doe</h4>
-                                        <span class="time">5 min ago</span>
-                                    </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat.</p>
-                                    <a href="#" class="reply">Reply</a>
-                                </div>
-                            </div>
-
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -243,34 +221,38 @@
                         <div class="section-title">
                             <h3 class="title">Leave a reply</h3>
                         </div>
-                        <form class="post-reply">
+                        <form class="post-reply" method="POST" action="">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea class="input" name="message" placeholder="Message"></textarea>
+                                        <textarea class="input" name="content" placeholder="Message" required></textarea>
+                                    </div>
+                                </div>
+                                {% if not user.is_authenticated %}
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="username" placeholder="Name" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input class="input" type="text" name="name" placeholder="Name">
+                                        <input class="input" type="email" name="email" placeholder="Email" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input class="input" type="email" name="email" placeholder="Email">
+                                        <input class="input" type="password" name="password" placeholder="Password" required>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input class="input" type="text" name="website" placeholder="Website">
-                                    </div>
-                                </div>
+                                {% endif %}
                                 <div class="col-md-12">
                                     <button class="primary-button">Submit</button>
                                 </div>
                             </div>
                         </form>
                     </div>
+                    
 
                 </div>
                 {% include "include/right_side.html" %}

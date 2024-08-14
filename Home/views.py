@@ -6,6 +6,8 @@ from django.utils import timezone
 from datetime import timedelta 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from Account.models import User 
 
 def get_category(): 
     category = Category.objects.all() 
@@ -61,7 +63,9 @@ def contact(request):
 
 def details_blog(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post).order_by('-created_at')
 
+    # Handling view count with session
     last_viewed_str = request.session.get(f'post_{post_id}_last_viewed')
     last_viewed = None
     if last_viewed_str:
@@ -79,15 +83,27 @@ def details_blog(request, post_id):
         post.save()
         request.session[f'post_{post_id}_last_viewed'] = now.isoformat()
 
-    context = {
-        'post': post
-    }
-    return render(request, 'details_blog.html', context)
-
-@login_required
-def add_comment(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    # Handling comment submission
     if request.method == 'POST':
+        # If not authenticated, handle registration
+        if not request.user.is_authenticated:
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+
+            if not User.objects.filter(username=username).exists():
+                # Create the user
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user = authenticate(username=username, password=password)
+                if user:
+                    login(request, user)
+                else:
+                    messages.error(request, 'Authentication failed. Please try again.')
+                    return redirect(post.get_absolute_url())
+            else:
+                messages.error(request, 'Username already exists.')
+                return redirect(post.get_absolute_url())
+
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -98,9 +114,37 @@ def add_comment(request, post_id):
             return redirect(post.get_absolute_url())
         else:
             messages.error(request, 'There was a problem with your comment.')
+
     else:
         form = CommentForm()
-    return render(request, 'add_comment.html', {'form': form, 'post': post})
+
+    # Handling reply submission (separate form handling)
+    if 'reply_content' in request.POST:
+        reply_form = ReplyForm(request.POST)
+        parent_comment_id = request.POST.get('parent_comment_id')
+        parent_comment = get_object_or_404(Comment, id=parent_comment_id)
+        
+        if reply_form.is_valid():
+            reply = reply_form.save(commit=False)
+            reply.comment = parent_comment
+            reply.user = request.user
+            reply.save()
+            messages.success(request, 'Your reply has been added.')
+            return redirect(post.get_absolute_url())
+        else:
+            messages.error(request, 'There was a problem with your reply.')
+    else:
+        reply_form = ReplyForm()
+
+    context = {
+        'post': post,
+        'comments': comments,
+        'form': form,
+        'reply_form': reply_form,
+    }
+    return render(request, 'details_blog.html', context)
+
+
 
 @login_required
 def reply_comment(request, comment_id):
